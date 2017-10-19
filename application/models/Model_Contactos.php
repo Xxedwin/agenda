@@ -9,6 +9,7 @@ class Model_Contactos extends CI_model
 	{
 		$data=array();
 
+        /*
 		$sql = "			
 			select 	
 				persona_vive 
@@ -22,10 +23,13 @@ class Model_Contactos extends CI_model
 		$query=$this->db->query($sql);
 		$persona_vive=$query->result_array();
 		$persona_vive=$persona_vive[0]['persona_vive'];
+         */
+        // TODO: Cambiar
+        $persona_vive = true;
 
 		$aa = "
 				insert into 
-					dbo.contactos
+					contactos
 					  (
 						  idregion
 						  ,Nombre
@@ -54,13 +58,14 @@ class Model_Contactos extends CI_model
 		$query = $this -> db -> get("contactos");
 		return $query -> result();
 	}
-	public function getPais(){
-	$this->db->order_by('pais_nom','asc');
-	$pais=$this->db->get('pais');
 
-		if ($pais->num_rows() > 0) {
-			return $pais->result();
-		}
+	public function getPais(){
+        $this->db->order_by('pais_nom','asc');
+        $pais=$this->db->get('pais');
+
+        if ($pais->num_rows() > 0) {
+            return $pais->result();
+        }
 	}	
 
 	public function getRegion($idpais){
