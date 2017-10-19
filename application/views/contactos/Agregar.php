@@ -3,7 +3,6 @@
 
 <div class="container">
 
-
 	<form id="frm_agregar">
 		<div class="row">
 			<div class="col-md-12">
@@ -11,7 +10,7 @@
 					<span class="input-group-addon" id="basic-addon1">
 						Nombre:
 					</span>
-					<input required="" type="text" class="form-control" placeholder="Tu nombre Aqui!" name="nnombre" aria-describedby="basic-addon1">				
+					<input required type="text" class="form-control" placeholder="Tu nombre Aqui!" name="nnombre" aria-describedby="basic-addon1">				
 				</div>			
 			</div>		
 		</div>
@@ -24,7 +23,7 @@
 					<span class="input-group-addon" id="basic-addon1">
 						Pais:
 					</span>
-					<select required="" id="idpais" name="idpais" class="form-control">
+					<select required id="idpais" name="idpais" class="form-control">
 	                        <option value="0"  >Paises</option>
 	                        <?php
 	                        	foreach ($pais as $i ) {
@@ -42,7 +41,7 @@
 					<span class="input-group-addon" id="basic-addon1">
 						Region:
 					</span>
-					<select required="" id="idregion" name="idregion" class="form-control">
+					<select required id="idregion" name="idregion" class="form-control">
 	                        <option value="0"  >Regiones</option>                        
 	                </select>				
 				</div>			
@@ -87,52 +86,67 @@
 		</div>
 	</form>	
 	<div id="error"></div>
-	<script type="text/javascript">
-	
-	$(document).ready(function(){
-		$('#idpais').select2();
-      	$('#idregion').select2();
-
-		$("#idpais").change(function(){
-			$("#idpais option:selected").each(function(){
-				idpais=$('#idpais').val();
-				$.post("<?php echo base_url(); ?>contactos/Lasregiones",{
-					idpais : idpais
-				}, function(data){
-					$("#idregion").html(data);
-				});
-			});
-		});
-
-		$("#btn_guardar").click(function(){
-			$.ajax({
-				   type: "POST",
-				   url: 'AgregarContacto',
-					data: $("#frm_agregar").serialize(),
-					beforeSend: function () {
-						$("frm_agregar").submit();
-					   $("#error").html("Procesando, espere por favor...");
-				   },
-				   success: function(response)
-				   {					   
-
-					    /*$("#error").html("enviado");*/
-						$("#error").html(response);
-						CargarModulo('permisos/mispapeletas');						
-					   
-				   }
-				 });
-			return false;
-		 });
-
-		
-
-	});
-
-
-	</script>
-		
 
 
 	
 </div>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$('#idpais').select2();
+  	$('#idregion').select2();
+
+	$("#idpais").change(function(){
+		$("#idpais option:selected").each(function(){
+			idpais=$('#idpais').val();
+			$.post("<?php echo base_url(); ?>contactos/Lasregiones",{
+				idpais : idpais
+			}, function(data){
+				$("#idregion").html(data);
+			});
+		});
+	});
+
+    $("#frm_agregar").on("submit", function(form) {
+            form.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Contactos/AgregarContacto',
+                data: $("#frm_agregar").serialize(),
+
+                beforeSend: function () {
+                    $("frm_agregar").submit();
+                    $("#error").html("Procesando, espere por favor...");
+                },
+                success: function(response)
+                {					   
+                    console.log("Response: ");
+                    console.log(response);
+                    $response = JSON.parse(response)
+                    if($response[0] == "ok"){
+                        console.log("Agregado");
+                        $("#error").html("enviado");
+                        $("#error").html($response[1]);
+                    } else {
+                        console.log("Error");
+                        console.log($response[1]);
+                    }
+                    /* CargarModulo('permisos/mispapeletas'); */						
+                },
+                error: function(jqXHR, estado, error)
+                {					   
+                    console.log("Estado: " + estado); 					   
+                    console.log("Error: " + error); 					   
+                },					   
+                complete: function(jqXHR, estado)
+                {					   
+                    console.log(estado); 					   
+                },
+                timeout: 1000                       
+            }); // End ajax method
+             /* return false; */
+    }); // End $("#frm_agregar").submit({
+
+});
+</script>
+		
