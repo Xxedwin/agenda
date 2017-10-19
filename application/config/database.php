@@ -75,11 +75,11 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'EDWIN-PC\SQLEXPRESS',
-	'username' => 'sa',
-	'password' => '123456',
-	'database' => 'contactos',
-	'dbdriver' => 'sqlsrv',
+	'hostname' => 'localhost',
+	'username' => 'edwin',
+	'password' => 'edwin',
+	'database' => '__edwin_contactos',
+	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
